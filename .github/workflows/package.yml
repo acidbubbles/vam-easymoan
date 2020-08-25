@@ -20,6 +20,7 @@ jobs:
       run: |
         mkdir -p publish/Custom/Scripts/geesp0t/EasyMoan
         cp -r src publish/Custom/Scripts/geesp0t/EasyMoan/
+        cp -r presets publish/Custom/Scripts/geesp0t/EasyMoan/
         cp *.cslist publish/Custom/Scripts/geesp0t/EasyMoan/
         cp meta.json publish/
         sed -i 's/v0.0.0/${{ steps.get_version.outputs.VERSION }}/' publish/meta.json
