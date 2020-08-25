@@ -16,6 +16,7 @@ namespace geesp0t
         protected JSONStorableBool facialExpressionsOn;
         protected JSONStorableBool breathingOn;
         protected JSONStorableBool gazeOn;
+        protected JSONStorableBool buttonsOn;
 
         protected JSONStorableFloat penisAtomRotation;
         protected JSONStorableFloat penisAtomInsertionAmount;
@@ -310,6 +311,29 @@ namespace geesp0t
                 CreateToggle(gazeOn);
                 RegisterBool(gazeOn);
                 gazeOn.storeType = JSONStorableParam.StoreType.Full;
+
+                buttonsOn = new JSONStorableBool("Buttons On", false);
+                CreateToggle(buttonsOn);
+                RegisterBool(buttonsOn);
+                buttonsOn.storeType = JSONStorableParam.StoreType.Full;
+                buttonsOn.setCallbackFunction = (bool val) => {
+                    if(val)
+                    {
+                        mainUIButtons.Start();
+                        if (easyMoanCycleForce != null)
+                        {
+                            if (easyMoanCycleForce.HasCycleForce())
+                            {
+                                mainUIButtons.hasCycleForce = true;
+                                mainUIButtons.CheckButtonNames();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        mainUIButtons.Cleanup();
+                    }
+                };
 
                 bool defaultResetExpressionsOnLoad = false;
                 if (IS_AUTOMATE_VERSION.IS_AUTOMATE) defaultResetExpressionsOnLoad = true;
@@ -907,7 +931,7 @@ namespace geesp0t
                 gazeLite = new GazeLite();
                 gazeLite.Init(containingAtom, (FreeControllerV3)containingAtom.GetStorableByID("headControl"));
 
-                if (mainUIButtons != null)
+                if (mainUIButtons != null && buttonsOn.val)
                 {
                     mainUIButtons.Start();
                     if (easyMoanCycleForce != null)
