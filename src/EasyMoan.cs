@@ -78,9 +78,9 @@ namespace geesp0t
         public class SoundWithMorph
         {
             public NamedAudioClip sound;
-            public DAZMorph morph;
+            public JSONStorableFloat morph;
 
-            public SoundWithMorph(NamedAudioClip theSound, DAZMorph theMorph)
+            public SoundWithMorph(NamedAudioClip theSound, JSONStorableFloat theMorph)
             {
                 sound = theSound;
                 morph = theMorph;
@@ -92,7 +92,7 @@ namespace geesp0t
             public string soundName;
             public string morphName;
             public bool isOrgasmSound = false;
-            public DAZMorph morph = null;
+            public JSONStorableFloat morph = null;
 
             public SoundWithMorphTableEntry(string theSoundName, string theMorphName, bool theIsOrgasmSound = false)
             {
@@ -116,12 +116,12 @@ namespace geesp0t
         protected List<NamedAudioClip> extendedOrgasmAudioClips = new List<NamedAudioClip>();
         protected List<NamedAudioClip> coolDownAudioClips = new List<NamedAudioClip>();
 
-        protected DAZMorph dazMorph;
+        protected JSONStorableFloat JSONStorableFloat;
 
         protected List<string> orgasmMorphs = new List<string>();
 
-        protected DAZMorph currentMorph;
-        protected DAZMorph desiredMorph;
+        protected JSONStorableFloat currentMorph;
+        protected JSONStorableFloat desiredMorph;
         protected bool desiredMorphReady = false;
 
         protected float morphActivateTime = 0.05f;
@@ -208,14 +208,12 @@ namespace geesp0t
         public void ResetFacialExpressions()
         {
             JSONStorable js = containingAtom.GetStorableByID("geometry");
-            DAZCharacterSelector dcs = js as DAZCharacterSelector;
-            GenerateDAZMorphsControlUI morphUI = dcs.morphsControlUI;
             foreach (SoundWithMorphTableEntry tableEntry in soundWithMorphTable)
             {
-                tableEntry.morph = morphUI.GetMorphByDisplayName(tableEntry.morphName);
+                tableEntry.morph = js.GetFloatJSONParam(tableEntry.morphName);
                 if (tableEntry.morph != null)
                 {
-                    tableEntry.morph.SetValue(0);
+                    tableEntry.morph.val = 0;
                 }
             }
         }
@@ -321,15 +319,12 @@ namespace geesp0t
                 
                 //find morphs
                 JSONStorable js = containingAtom.GetStorableByID("geometry");
-                DAZCharacterSelector dcs = js as DAZCharacterSelector;
-                GenerateDAZMorphsControlUI morphUI = dcs.morphsControlUI;
-
-                DAZMorph stomachMorph = morphUI.GetMorphByDisplayName("Breath1");
+                JSONStorableFloat stomachMorph = js.GetFloatJSONParam("Breath1");
                 if (stomachMorph == null) SuperController.LogError("Missing stomach morph");
 
                 foreach (SoundWithMorphTableEntry tableEntry in soundWithMorphTable)
                 {
-                    tableEntry.morph = morphUI.GetMorphByDisplayName(tableEntry.morphName);
+                    tableEntry.morph = js.GetFloatJSONParam(tableEntry.morphName);
                     if (tableEntry.morph == null)
                     {
                         SuperController.LogError("Missing morph: " + tableEntry.morphName + ". Please add all morphs from the AshAuryn Sexpressions pack TenStrip_Expressions pack to VAM.");
@@ -537,7 +532,7 @@ namespace geesp0t
                                     if (subTableEntry.soundName == orgasmString)
                                     {
                                         desiredMorph = subTableEntry.morph;
-                                        if (logMessages) SuperController.LogMessage("Desired Orgasm Morph " + desiredMorph.morphName);
+                                        if (logMessages) SuperController.LogMessage("Desired Orgasm Morph " + desiredMorph.altName);
                                         break;
                                     }
                                 }
@@ -545,7 +540,7 @@ namespace geesp0t
                             else
                             {
                                 desiredMorph = tableEntry.morph;
-                                if (logMessages) SuperController.LogMessage("Desired Morph " + desiredMorph.morphName);
+                                if (logMessages) SuperController.LogMessage("Desired Morph " + desiredMorph.altName);
                             }
 
                             desiredMorphReady = true;
@@ -556,7 +551,7 @@ namespace geesp0t
                     if (logMessages && !desiredMorphReady) SuperController.LogMessage("Missing morph for sound " + audioClip.displayName + " " + audioClip.category);
                 }
 
-               if (logMessages) SuperController.LogMessage("Playing sound " + audioClip.displayName + " morph " + desiredMorph.displayName);
+               if (logMessages) SuperController.LogMessage("Playing sound " + audioClip.displayName + " morph " + desiredMorph.altName);
             }
             catch (Exception e) { SuperController.LogError("Exception caught: " + e); }
         }
@@ -604,13 +599,13 @@ namespace geesp0t
                 {
                     desiredMorphReady = false;
 
-                    if (currentMorph != null) currentMorph.SetValue(0);
+                    if (currentMorph != null) currentMorph.val = 0;
                     currentMorph = desiredMorph;
 
                     morphChanging = true;
                     morphTime = 0;
-                    currentMorph.SetValue(0);
-                    if (logMessages) SuperController.LogMessage("Desired Morph: " + desiredMorph.displayName);
+                    currentMorph.val = 0;
+                    if (logMessages) SuperController.LogMessage("Desired Morph: " + desiredMorph.altName);
 
                     SetVAMBlinkEnabled(false);
                 }
@@ -620,24 +615,24 @@ namespace geesp0t
                     morphTime += Time.deltaTime;
                     if (morphTime < morphActivateTime)
                     {
-                        currentMorph.SetValue((morphTime / morphActivateTime) * morphPowerPercent.val);
+                        currentMorph.val = (morphTime / morphActivateTime) * morphPowerPercent.val;
                         morphHoldOscVal = 0;
                     }
                     else if (morphTime < morphActivateTime + morphHoldTime)
                     {
                         //oscillate a little during hold
                         morphHoldOscVal += Time.deltaTime;
-                        currentMorph.SetValue((1.0f - Mathf.Sin(morphHoldOscVal * 7.0f) * 0.07f) * morphPowerPercent.val);
+                        currentMorph.val = (1.0f - Mathf.Sin(morphHoldOscVal * 7.0f) * 0.07f) * morphPowerPercent.val;
                     }
                     else if (morphTime >= morphActivateTime + morphHoldTime + morphDeactivateTime)
                     {
-                        currentMorph.SetValue(0);
+                        currentMorph.val = 0;
                         morphChanging = false;
                         SetVAMBlinkEnabled(wasVAMAutoBlink);
                     }
                     else
                     {
-                        currentMorph.SetValue((1.0f - (morphTime - (morphActivateTime + morphHoldTime)) / morphDeactivateTime) * morphPowerPercent.val);
+                        currentMorph.val = (1.0f - (morphTime - (morphActivateTime + morphHoldTime)) / morphDeactivateTime) * morphPowerPercent.val;
                     }
                 }
 
@@ -732,7 +727,7 @@ namespace geesp0t
             float timeBetweenSteps = 0.5f;
             bool progressToNextStep = false;
             NamedAudioClip clipToPlay = null;
-            if (currentMorph == null || currentMorph.morphValue < 0.1f)
+            if (currentMorph == null || currentMorph.val < 0.1f)
             {
                 if (Time.timeSinceLevelLoad - orgasmStartTime > timeBetweenSteps)
                 {

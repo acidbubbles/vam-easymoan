@@ -17,7 +17,7 @@ namespace geesp0t
         private int breatheIndex = 0;
         private BreathEntry breatheEntry;
         private bool breatheNeedInit = true;
-        private DAZMorph stomachMorph;
+        private JSONStorableFloat stomachMorph;
         private FreeControllerV3 chestController;
         
         private struct BreathEntry
@@ -113,7 +113,7 @@ namespace geesp0t
                 power *= breathePower;
                 float t = 1.0f - BlendOutIn(0.0f, 0.0f, 0.0f, 0.0f);
                 float max = stomachPower * power;
-                stomachMorph.morphValue = Mathf.SmoothStep(0.3f, -max, t);
+                stomachMorph.val = Mathf.SmoothStep(0.3f, -max, t);
             }
 
             if (chestController != null)
@@ -128,7 +128,7 @@ namespace geesp0t
             }
         }
 
-        public void InitBreathing(Atom containingAtom, DAZMorph theStomachMorph)
+        public void InitBreathing(Atom containingAtom, JSONStorableFloat theStomachMorph)
         {
             try
             {

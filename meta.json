@@ -1,0 +1,16 @@
+{ 
+   "licenseType" : "CC BY-SA", 
+   "creatorName" : "geesp0t", 
+   "packageName" : "EasyMoan", 
+   "includeVersionsInReferences" : "true", 
+   "description" : "v0.0.0 Add this plugin to a person and they will respond with moans, blow job sounds, and eventually orgasm, as you touch their Lips, Mouth, Throat, Breasts, Labia, Vagina and Deep Vagina triggers. Also includes a lite version of MacGruber's Gaze and Breathe for added realism. Uses VAM built-in audio clips with ashauryn Sexpressions.", 
+   "credits" : "This plugin is owned by geesp0t, and was updated for VaM 1.20 by Acid Bubbles.", 
+   "instructions" : "", 
+   "promotionalLink" : "https://github.com/acidbubbles/vam-easymoan", 
+   "programVersion" : "1.20.0.7", 
+   "contentList" : [ 
+      "Custom\\Scripts\\geesp0t\\EasyMoan\\EasyMoan.cs"
+   ], 
+   "dependencies" : { 
+   }
+}
