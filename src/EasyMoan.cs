@@ -198,13 +198,13 @@ namespace geesp0t
         float insertVertOffset = 0;
 
         bool resetVaginaMorphs = false;
-        protected DAZMorph labiaMinoraLowL;
-        protected DAZMorph labiaMinoraLowR;
-        protected DAZMorph labiaMajoraLowL;
-        protected DAZMorph labiaMajoraLowR;
-        protected DAZMorph anusOpenOut;
-        protected DAZMorph anusPushPull;
-        protected DAZMorph vaginaExpansion;
+        protected JSONStorableFloat labiaMinoraLowL;
+        protected JSONStorableFloat labiaMinoraLowR;
+        protected JSONStorableFloat labiaMajoraLowL;
+        protected JSONStorableFloat labiaMajoraLowR;
+        protected JSONStorableFloat anusOpenOut;
+        protected JSONStorableFloat anusPushPull;
+        protected JSONStorableFloat vaginaExpansion;
 
         float labiaMinoraLowL_start = 0;
         float labiaMinoraLowR_start = 0;
@@ -269,7 +269,7 @@ namespace geesp0t
                 RegisterFloat(penisAtomInsertionAmount);
                 CreateSlider(penisAtomInsertionAmount, true);
 
-                penisAtomThrustSpeed = new JSONStorableFloat("Penis Atom Thrust Speed (0 for manual)", 0.5f, 0.0f, 1.5f, false); 
+                penisAtomThrustSpeed = new JSONStorableFloat("Penis Atom Thrust Speed (0 for manual)", 0.5f, 0.0f, 1.5f, false);
                 penisAtomThrustSpeed.storeType = JSONStorableParam.StoreType.Full;
                 RegisterFloat(penisAtomThrustSpeed);
                 CreateSlider(penisAtomThrustSpeed, true);
@@ -327,7 +327,7 @@ namespace geesp0t
                 if (string.IsNullOrEmpty(targetAtomChooser.val))
                 {
                     //is there a person that isn't me?
-                    if (targetAtomChooser.choices.Count > 0) { 
+                    if (targetAtomChooser.choices.Count > 0) {
                         string selectedItem = targetAtomChooser.choices[0];
                         foreach (Atom atom in SuperController.singleton.GetAtoms())
                         {
@@ -349,7 +349,7 @@ namespace geesp0t
                  targetAtomControllerChooser = new JSONStorableStringChooser("targetAtomController",
                    GetFreeControllersInGazeTarget(), "", "Gaze Target Atom Controller", (name) =>
                    {
-                       if (gazeTargetAtom != null && gazeTargetAtom.freeControllers.Length > 0) { 
+                       if (gazeTargetAtom != null && gazeTargetAtom.freeControllers.Length > 0) {
                            foreach (FreeControllerV3 freeController in gazeTargetAtom.freeControllers)
                            {
                                if (freeController.name == name)
@@ -390,7 +390,7 @@ namespace geesp0t
                 RegisterFloat(headMinDistance);
                 headMinDistance.storeType = JSONStorableParam.StoreType.Full;
                 CreateSlider(headMinDistance);
-                
+
                 morphPowerPercent = new JSONStorableFloat("Expression Max Power", 0.85f, 0.0f, 1.0f, false);
                 RegisterFloat(morphPowerPercent);
                 morphPowerPercent.storeType = JSONStorableParam.StoreType.Full;
@@ -497,16 +497,16 @@ namespace geesp0t
             }
 
             createdDildoAtom.LoadPreset("Saves/Dildo/full/EasyMoanPenis.json");
-            
+
             //set rotation to equal hip rotation, then rotate z an extra 90 degrees
             Rigidbody targetRB = containingAtom.rigidbodies.First(rb => rb.name == "VaginaTrigger");
 
             dildoController = createdDildoAtom.freeControllers[0];
-            
+
             dildoController.transform.rotation = targetRB.transform.rotation;
 
             dildoController.transform.Rotate(-90.0f, -90.0f, 90.0f, Space.Self);
-           
+
             Vector3 eulerRot = dildoController.transform.localRotation.eulerAngles;
             eulerRot.z = 0;
             dildoController.transform.localRotation = Quaternion.Euler(eulerRot);
@@ -667,7 +667,7 @@ namespace geesp0t
                 //orgasmMorphs.Add("AAsex_squintbrOH4"); //ohhh with eyes squiting
                 //orgasmMorphs.Add("AAsex_closetightsm1e"); //huge pleasure smile
                 //AAsex_squintbrER5  //great for something, a bit of an ahhhh
-                //AAsex_closetightAA6 
+                //AAsex_closetightAA6
                 //AAsex_brraiseOH8
 
                 //ORGASM
@@ -677,45 +677,45 @@ namespace geesp0t
 
                 //LONG ORGASM, REPLACES COMPLEX ORGASM STEPS WITH A SINGLE AUDIO CLIP
                 soundWithMorphTable.Add(new SoundWithMorphTableEntry("FemMoanSex", "AAsex_closetightAA6"));
-                
+
                 //POST ORGASM
                 soundWithMorphTable.Add(new SoundWithMorphTableEntry("FemBreathShiver", "AAsex_closetightAA6"));
                 //soundWithMorphTable.Add(new SoundWithMorphTableEntry("FemBreathCoolDown1", "AAsex_wideOH7"));
                 soundWithMorphTable.Add(new SoundWithMorphTableEntry("FemBreathCoolDown4", "AAsex_closetightAA6"));
-                
+
                 //find morphs
                 JSONStorable js = containingAtom.GetStorableByID("geometry");
                 JSONStorableFloat stomachMorph = js.GetFloatJSONParam("Breath1");
                 //if using Breathing plugin
-                /*if (morphUI.GetMorphByDisplayName("Breath1") == null) SuperController.LogError("Missing stomach morph for breathing");
-                if (morphUI.GetMorphByDisplayName("Ribcage Size") == null) SuperController.LogError("Missing Ribcage Size morph for breathing");
-                if (morphUI.GetMorphByDisplayName("Sternum Depth") == null) SuperController.LogError("Missing Sternum Depth morph for breathing");*/
+                /*if (js.GetFloatJSONParam("Breath1") == null) SuperController.LogError("Missing stomach morph for breathing");
+                if (js.GetFloatJSONParam("Ribcage Size") == null) SuperController.LogError("Missing Ribcage Size morph for breathing");
+                if (js.GetFloatJSONParam("Sternum Depth") == null) SuperController.LogError("Missing Sternum Depth morph for breathing");*/
 
                 //if using BreatheLight
                 if (stomachMorph == null) SuperController.LogError("Missing stomach morph");
 
-                labiaMinoraLowL = morphUI.GetMorphByDisplayName("Labia minora-spread-LLow"); //0.3 during arousal
-                labiaMinoraLowR = morphUI.GetMorphByDisplayName("Labia minora-spread-RLow");
-                labiaMajoraLowL = morphUI.GetMorphByDisplayName("Labia majora-spread-LLow"); //0.3 during arousal
-                labiaMajoraLowR = morphUI.GetMorphByDisplayName("Labia majora-spread-RLow");
-                anusOpenOut = morphUI.GetMorphByDisplayName("Anus-Open-Out"); //0 0.28 cycle during orgasm
-                anusPushPull = morphUI.GetMorphByDisplayName("Anus-Push.Pull"); //-.15 .15
-                vaginaExpansion = morphUI.GetMorphByDisplayName("Vagina-expansion"); //0 0.2 during arousal, up to 0.5  during orgasm
+                labiaMinoraLowL = js.GetFloatJSONParam("Labia minora-spread-LLow"); //0.3 during arousal
+                labiaMinoraLowR = js.GetFloatJSONParam("Labia minora-spread-RLow");
+                labiaMajoraLowL = js.GetFloatJSONParam("Labia majora-spread-LLow"); //0.3 during arousal
+                labiaMajoraLowR = js.GetFloatJSONParam("Labia majora-spread-RLow");
+                anusOpenOut = js.GetFloatJSONParam("Anus-Open-Out"); //0 0.28 cycle during orgasm
+                anusPushPull = js.GetFloatJSONParam("Anus-Push.Pull"); //-.15 .15
+                vaginaExpansion = js.GetFloatJSONParam("Vagina-expansion"); //0 0.2 during arousal, up to 0.5  during orgasm
 
-                labiaMinoraLowL_start = labiaMinoraLowL.morphValue;
-                labiaMinoraLowR_start = labiaMinoraLowR.morphValue;
-                labiaMajoraLowL_start = labiaMajoraLowL.morphValue;
-                labiaMajoraLowR_start = labiaMajoraLowR.morphValue;
-                anusOpenOut_start = anusOpenOut.morphValue;
-                anusPushPull_start = anusPushPull.morphValue - 0.15f;
-                vaginaExpansion_start = vaginaExpansion.morphValue;
+                labiaMinoraLowL_start = labiaMinoraLowL.val;
+                labiaMinoraLowR_start = labiaMinoraLowR.val;
+                labiaMajoraLowL_start = labiaMajoraLowL.val;
+                labiaMajoraLowR_start = labiaMajoraLowR.val;
+                anusOpenOut_start = anusOpenOut.val;
+                anusPushPull_start = anusPushPull.val - 0.15f;
+                vaginaExpansion_start = vaginaExpansion.val;
 
                 labiaMinoraLowL_max = labiaMinoraLowL_start + 0.3f;
                 labiaMinoraLowR_max = labiaMinoraLowR_start + 0.3f;
                 labiaMajoraLowL_max = labiaMajoraLowL_start + 0.3f;
                 labiaMajoraLowR_max = labiaMajoraLowR_start + 0.3f;
                 anusOpenOut_max = anusOpenOut_start + 0.25f;
-                anusPushPull_max = anusPushPull.morphValue + 0.15f;
+                anusPushPull_max = anusPushPull.val + 0.15f;
                 vaginaExpansion_max = vaginaExpansion_start + 0.2f;
 
 
@@ -899,7 +899,7 @@ namespace geesp0t
 
                 //breathing plugin
                 //if (breathing == null) breathing = FindInPlugin<extraltodeusBreathingPlugin.B>(this);
-                
+
                 //if using breatheLight
                 breatheLite = new BreatheLite();
                 breatheLite.InitBreathing(containingAtom, stomachMorph);
@@ -960,7 +960,7 @@ namespace geesp0t
 
                             desiredMorph = tableEntry.morph;
                             if (logMessages) SuperController.LogMessage("Desired Morph " + desiredMorph.altName);
-                   
+
                             desiredMorphReady = true;
                             break;
                         }
@@ -1021,7 +1021,7 @@ namespace geesp0t
                 //DISABLE WHEN NOT TESTING
                 //TestAllSounds(); soundTesterCategory = 6;
                 //to test sounds starting in a location, also put this in start() soundTesterCategory = 5; soundTesterIndex = 0;
-                                
+
                 if (SuperController.singleton.isLoading && !wasLoading)
                 {
                     wasLoading = true;
@@ -1050,7 +1050,7 @@ namespace geesp0t
                             //won't be stimulated if a static penis is there and she is not thrusting
                             //so don't try to reinsert
                         }
-                        else { 
+                        else {
                             //want it, try to rotate towards a likely target
 
                             reinsertTimer -= Time.deltaTime;
@@ -1064,7 +1064,7 @@ namespace geesp0t
                             }
                         }
                     }
-                    
+
                     if (removeDildo > 0)
                     {
                         removeDildo -= Time.deltaTime;
@@ -1164,7 +1164,7 @@ namespace geesp0t
                                 dildoController.transform.position = Vector3.Lerp(dildoStartPosition, dildoTargetPosition, dildoCyclePercent);
 
                                 if (_scriptConnectionTransform != null)
-                                { 
+                                {
                                     _scriptConnectionTransform.position = new Vector3(vamLaunchDirection, penisAtomThrustSpeed.val, _scriptConnectionTransform.position.z);
                                 }
                             }
@@ -1273,7 +1273,7 @@ namespace geesp0t
                     {
                         //as soon as we finish, start again
                         orgasmAgain = true;
-                    } else { 
+                    } else {
                         StartOrgasm();
                     }
                 }
@@ -1292,7 +1292,7 @@ namespace geesp0t
                 percentToOrgasm = vagTouchTime / stimulationToOrgasm.val;
                 if (percentToOrgasm < 0) percentToOrgasm = 0;
                 if (orgasming) percentToOrgasm = 1.0f;
-               
+
                 explanationString.val = string.Format("Orgasm Percent: {0:P}", percentToOrgasm);
 
 
@@ -1300,22 +1300,22 @@ namespace geesp0t
                 if (orgasming)
                 {
                     float contractionPercent = Mathf.PingPong(Time.time * 2.8f, 1.0f);
-                    anusOpenOut.SetValue(Mathf.Lerp(anusOpenOut_start, anusOpenOut_max, contractionPercent));
-                    anusPushPull.SetValue(Mathf.Lerp(anusPushPull_start, anusPushPull_max, contractionPercent));
-                    vaginaExpansion.SetValue(Mathf.Lerp(vaginaExpansion_max, vaginaExpansion_max + 0.5f, contractionPercent));
-                    labiaMinoraLowL.SetValue(Mathf.Lerp(labiaMinoraLowL_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent));
-                    labiaMinoraLowR.SetValue(Mathf.Lerp(labiaMinoraLowR_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent));
-                    labiaMajoraLowL.SetValue(Mathf.Lerp(labiaMajoraLowL_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent));
-                    labiaMajoraLowR.SetValue(Mathf.Lerp(labiaMajoraLowR_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent));
+                    anusOpenOut.val = Mathf.Lerp(anusOpenOut_start, anusOpenOut_max, contractionPercent);
+                    anusPushPull.val = Mathf.Lerp(anusPushPull_start, anusPushPull_max, contractionPercent);
+                    vaginaExpansion.val = Mathf.Lerp(vaginaExpansion_max, vaginaExpansion_max + 0.5f, contractionPercent);
+                    labiaMinoraLowL.val = Mathf.Lerp(labiaMinoraLowL_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent);
+                    labiaMinoraLowR.val = Mathf.Lerp(labiaMinoraLowR_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent);
+                    labiaMajoraLowL.val = Mathf.Lerp(labiaMajoraLowL_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent);
+                    labiaMajoraLowR.val = Mathf.Lerp(labiaMajoraLowR_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent);
                 } else
                 {
-                    anusOpenOut.SetValue(anusOpenOut_start);
-                    anusPushPull.SetValue(anusPushPull_start);
-                    labiaMinoraLowL.SetValue(Mathf.Lerp(labiaMinoraLowL_start, labiaMinoraLowL_max, percentToOrgasm));
-                    labiaMinoraLowR.SetValue(Mathf.Lerp(labiaMinoraLowR_start, labiaMinoraLowR_max, percentToOrgasm));
-                    labiaMajoraLowL.SetValue(Mathf.Lerp(labiaMajoraLowL_start, labiaMajoraLowL_max, percentToOrgasm));
-                    labiaMajoraLowR.SetValue(Mathf.Lerp(labiaMajoraLowR_start, labiaMajoraLowR_max, percentToOrgasm));
-                    vaginaExpansion.SetValue(Mathf.Lerp(vaginaExpansion_start, vaginaExpansion_max, percentToOrgasm));
+                    anusOpenOut.val = anusOpenOut_start;
+                    anusPushPull.val = anusPushPull_start;
+                    labiaMinoraLowL.val = Mathf.Lerp(labiaMinoraLowL_start, labiaMinoraLowL_max, percentToOrgasm);
+                    labiaMinoraLowR.val = Mathf.Lerp(labiaMinoraLowR_start, labiaMinoraLowR_max, percentToOrgasm);
+                    labiaMajoraLowL.val = Mathf.Lerp(labiaMajoraLowL_start, labiaMajoraLowL_max, percentToOrgasm);
+                    labiaMajoraLowR.val = Mathf.Lerp(labiaMajoraLowR_start, labiaMajoraLowR_max, percentToOrgasm);
+                    vaginaExpansion.val = Mathf.Lerp(vaginaExpansion_start, vaginaExpansion_max, percentToOrgasm);
                 }
 
                 if (easyMoanCycleForce != null) easyMoanCycleForce.percentToOrgasm = percentToOrgasm;
@@ -1583,7 +1583,7 @@ namespace geesp0t
                         soundToPlay = throatTouchAudioClips[UnityEngine.Random.Range(0, throatTouchAudioClips.Count())];
                     }
 
-            
+
                 }
             }
             else
@@ -1645,7 +1645,7 @@ namespace geesp0t
                 //if (logMessages && logTriggerMessages) SuperController.LogMessage("stop touching r breast");
             }
         }
-        
+
         void ObserveLabiaTrigger(object sender, TriggerEventArgs e)
         {
             if (e.evtType == "Entered" && !SuperController.singleton.isLoading)
@@ -1684,8 +1684,8 @@ namespace geesp0t
                 labiaTouching = false;
                 // if (logMessages && logTriggerMessages) SuperController.LogMessage("stop labia touch");
             }
-        }         
-        
+        }
+
         void SimVagTrigger()
         {
             if (!orgasming) {
@@ -1747,7 +1747,7 @@ namespace geesp0t
                             //when close to orgasm include also deep vag touch clips
                             soundToPlay = deepVagTouchAudioClips[UnityEngine.Random.Range(0, deepVagTouchAudioClips.Count())];
                             if (logMessages && logTriggerMessages) SuperController.LogMessage("Play Deep Vag sound when touching vag due to chance and orgasm percent: " + percentToOrgasm);
-                        } else { 
+                        } else {
                             soundToPlay = vagTouchAudioClips[UnityEngine.Random.Range(0, vagTouchAudioClips.Count())];
                             if (logMessages && logTriggerMessages) SuperController.LogMessage("Play Vag Sound");
                         }
@@ -1794,13 +1794,13 @@ namespace geesp0t
         {
             try
             {
-                if (anusOpenOut != null) anusOpenOut.SetValue(anusOpenOut_start);
-                if (anusPushPull != null) anusPushPull.SetValue(anusPushPull_start);
-                if (labiaMinoraLowL != null) labiaMinoraLowL.SetValue(labiaMinoraLowL_start);
-                if (labiaMinoraLowR != null) labiaMinoraLowR.SetValue(labiaMinoraLowR_start);
-                if (labiaMajoraLowL != null) labiaMajoraLowL.SetValue(labiaMajoraLowL_start);
-                if (labiaMajoraLowR != null) labiaMajoraLowR.SetValue(labiaMajoraLowR_start);
-                if (vaginaExpansion != null) vaginaExpansion.SetValue(vaginaExpansion_start);
+                if (anusOpenOut != null) anusOpenOut.val = anusOpenOut_start;
+                if (anusPushPull != null) anusPushPull.val = anusPushPull_start;
+                if (labiaMinoraLowL != null) labiaMinoraLowL.val = labiaMinoraLowL_start;
+                if (labiaMinoraLowR != null) labiaMinoraLowR.val = labiaMinoraLowR_start;
+                if (labiaMajoraLowL != null) labiaMajoraLowL.val = labiaMajoraLowL_start;
+                if (labiaMajoraLowR != null) labiaMajoraLowR.val = labiaMajoraLowR_start;
+                if (vaginaExpansion != null) vaginaExpansion.val = vaginaExpansion_start;
                 if (mainUIButtons != null) mainUIButtons.OnDestroy();
             }
             catch (Exception e)

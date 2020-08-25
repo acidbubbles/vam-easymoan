@@ -42,12 +42,10 @@ namespace extraltodeusBreathingPlugin
             Vector3 eulerAngles = chest.transform.localEulerAngles;
 
             JSONStorable geometry = containingAtom.GetStorableByID("geometry");
-            DAZCharacterSelector character = geometry as DAZCharacterSelector;
-            GenerateDAZMorphsControlUI morphControl = character.morphsControlUI;
 
-            DAZMorph morphBreath = morphControl.GetMorphByDisplayName("Breath1");
-            DAZMorph morphRibcage = morphControl.GetMorphByDisplayName("Ribcage Size");
-            DAZMorph morphSternum = morphControl.GetMorphByDisplayName("Sternum Depth");
+            JSONStorableFloat morphBreath = geometry.GetFloatJSONParam("Breath1");
+            JSONStorableFloat morphRibcage = geometry.GetFloatJSONParam("Ribcage Size");
+            JSONStorableFloat morphSternum = geometry.GetFloatJSONParam("Sternum Depth");
 
             if (toggles["Play"].toggle.isOn)
             {
@@ -87,8 +85,6 @@ namespace extraltodeusBreathingPlugin
             {
                 #region Sliders
                 JSONStorable geometry = containingAtom.GetStorableByID("geometry");
-                DAZCharacterSelector character = geometry as DAZCharacterSelector;
-                GenerateDAZMorphsControlUI morphControl = character.morphsControlUI;
 
                 intensitySlider = new JSONStorableFloat("Intensity", 0.3f, 0f, 1.0f, false);
                 intensitySlider.storeType = JSONStorableParam.StoreType.Full;
