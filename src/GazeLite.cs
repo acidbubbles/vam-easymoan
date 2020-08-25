@@ -28,10 +28,21 @@ namespace geesp0t
 			}
 		}
 
-        public void FixedUpdate()
+        public void FixedUpdate(Atom gazeTargetAtom, FreeControllerV3 gazeTargetFreeController)
         {
             if (lookAtTarget == null || head == null || reference == null)
                 return;
+
+            if (gazeTargetAtom != null)
+            {
+                if (gazeTargetFreeController != null)
+                {
+                    lookAtTarget = gazeTargetFreeController.transform;
+                } else
+                {
+                    lookAtTarget = gazeTargetAtom.transform;
+                }
+            }
 
             // compute horizontal and vertical angles
             Vector3 lookAtPosition = lookAtTarget.TransformPoint(lookAtOffset);

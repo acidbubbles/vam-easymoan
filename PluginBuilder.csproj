@@ -90,8 +90,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BreatheLite.cs" />
+    <Compile Include="src\Breathing.cs" />
     <Compile Include="src\EasyMoan.cs" />
+    <Compile Include="src\EasyMoanCycleForce.cs" />
     <Compile Include="src\GazeLite.cs" />
+    <Compile Include="src\IS_AUTOMATE_VERSION.cs" />
+    <Compile Include="src\MainUIButtons.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
