@@ -1,3 +1,6 @@
+src/IS_AUTOMATE_VERSION.cs
 src/EasyMoan.cs
+src/EasyMoanCycleForce.cs
 src/BreatheLite.cs
+src/MainUIButtons.cs
 src/GazeLite.cs
