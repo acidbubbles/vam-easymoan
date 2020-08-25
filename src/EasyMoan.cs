@@ -959,9 +959,10 @@ namespace geesp0t
                             if (logMessages) SuperController.LogMessage("Found sound " + audioClip.displayName + " " + " " + audioClip.category + " " + audioClip.clipToPlay.length);
 
                             desiredMorph = tableEntry.morph;
-                            if (logMessages) SuperController.LogMessage("Desired Morph " + desiredMorph.altName);
+                            if (logMessages) SuperController.LogMessage("Desired Morph " + desiredMorph?.altName);
 
-                            desiredMorphReady = true;
+                            if(desiredMorph != null) desiredMorphReady = true;
+
                             break;
                         }
                     }
@@ -969,7 +970,7 @@ namespace geesp0t
                     if (logMessages && !desiredMorphReady) SuperController.LogMessage("Missing morph for sound " + audioClip.displayName + " " + audioClip.category);
                 }
 
-               if (logMessages) SuperController.LogMessage("Playing sound " + audioClip.displayName + " morph " + desiredMorph.altName);
+               if (logMessages) SuperController.LogMessage("Playing sound " + audioClip.displayName + " morph " + desiredMorph?.altName);
             }
             catch (Exception e) { SuperController.LogError("Exception caught: " + e); }
         }
@@ -1203,7 +1204,7 @@ namespace geesp0t
                     morphChanging = true;
                     morphTime = 0;
                     currentMorph.val = 0;
-                    if (logMessages) SuperController.LogMessage("Desired Morph: " + desiredMorph.altName);
+                    if (logMessages) SuperController.LogMessage("Desired Morph: " + desiredMorph?.altName);
 
                     SetVAMBlinkEnabled(false);
                 }
