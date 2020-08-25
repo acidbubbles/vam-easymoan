@@ -32,6 +32,9 @@
     <Reference Include="UnityEngine">
       <HintPath>../../../../VaM_Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>../../../../VaM_Data/Managed/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>../../../../VaM_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -62,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="MyPlugin.cs" />
+    <Compile Include="EasyMoan.cs" />
   </ItemGroup>
 
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
