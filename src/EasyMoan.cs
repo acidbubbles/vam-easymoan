@@ -520,7 +520,8 @@ namespace geesp0t
                 mainUIButtons.CheckButtonNames();
             }
 
-            createdDildoAtom.LoadPreset("SELF:/Custom/Scripts/geesp0t/EasyMoan/presets/EasyMoanPenis.json");
+            // Acidbubbles: This is not working :|
+            // createdDildoAtom.LoadPreset("SELF:/Custom/Scripts/geesp0t/EasyMoan/presets/EasyMoanPenis.json");
 
             //set rotation to equal hip rotation, then rotate z an extra 90 degrees
             Rigidbody targetRB = containingAtom.rigidbodies.First(rb => rb.name == "VaginaTrigger");
