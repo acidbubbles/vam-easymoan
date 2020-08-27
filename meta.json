@@ -12,5 +12,15 @@
       "Custom\\Scripts\\geesp0t\\EasyMoan\\EasyMoan.cs"
    ], 
    "dependencies" : { 
+      "AshAuryn.Sexpressions.latest" : { 
+         "licenseType" : "CC BY", 
+         "dependencies" : { 
+         }
+      }, 
+      "TenStrip.Expressions.latest" : { 
+         "licenseType" : "FC", 
+         "dependencies" : { 
+         }
+      }
    }
 }
