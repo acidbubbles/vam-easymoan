@@ -312,7 +312,7 @@ namespace geesp0t
                 RegisterBool(gazeOn);
                 gazeOn.storeType = JSONStorableParam.StoreType.Full;
 
-                buttonsOn = new JSONStorableBool("Buttons On", false);
+                buttonsOn = new JSONStorableBool("HUD Buttons On", false);
                 CreateToggle(buttonsOn);
                 RegisterBool(buttonsOn);
                 buttonsOn.storeType = JSONStorableParam.StoreType.Full;
