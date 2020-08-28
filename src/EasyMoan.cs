@@ -723,24 +723,25 @@ namespace geesp0t
                 labiaMinoraLowR = js.GetFloatJSONParam("Labia minora-spread-RLow");
                 labiaMajoraLowL = js.GetFloatJSONParam("Labia majora-spread-LLow"); //0.3 during arousal
                 labiaMajoraLowR = js.GetFloatJSONParam("Labia majora-spread-RLow");
+                // From Genitalia Reloaded, which is not a free addon.
                 anusOpenOut = js.GetFloatJSONParam("Anus-Open-Out"); //0 0.28 cycle during orgasm
                 anusPushPull = js.GetFloatJSONParam("Anus-Push.Pull"); //-.15 .15
                 vaginaExpansion = js.GetFloatJSONParam("Vagina-expansion"); //0 0.2 during arousal, up to 0.5  during orgasm
 
-                labiaMinoraLowL_start = labiaMinoraLowL.val;
-                labiaMinoraLowR_start = labiaMinoraLowR.val;
-                labiaMajoraLowL_start = labiaMajoraLowL.val;
-                labiaMajoraLowR_start = labiaMajoraLowR.val;
-                anusOpenOut_start = anusOpenOut.val;
-                anusPushPull_start = anusPushPull.val - 0.15f;
-                vaginaExpansion_start = vaginaExpansion.val;
+                labiaMinoraLowL_start = labiaMinoraLowL?.val ?? 0;
+                labiaMinoraLowR_start = labiaMinoraLowR?.val ?? 0;
+                labiaMajoraLowL_start = labiaMajoraLowL?.val ?? 0;
+                labiaMajoraLowR_start = labiaMajoraLowR?.val ?? 0;
+                anusOpenOut_start = anusOpenOut?.val ?? 0;
+                anusPushPull_start = (anusPushPull?.val - 0.15f) ?? 0;
+                vaginaExpansion_start = vaginaExpansion?.val ?? 0;
 
                 labiaMinoraLowL_max = labiaMinoraLowL_start + 0.3f;
                 labiaMinoraLowR_max = labiaMinoraLowR_start + 0.3f;
                 labiaMajoraLowL_max = labiaMajoraLowL_start + 0.3f;
                 labiaMajoraLowR_max = labiaMajoraLowR_start + 0.3f;
                 anusOpenOut_max = anusOpenOut_start + 0.25f;
-                anusPushPull_max = anusPushPull.val + 0.15f;
+                anusPushPull_max = (anusPushPull?.val + 0.15f) ?? 0f;
                 vaginaExpansion_max = vaginaExpansion_start + 0.2f;
 
 
@@ -1226,9 +1227,12 @@ namespace geesp0t
                     if (currentMorph != null) currentMorph.val = 0;
                     currentMorph = desiredMorph;
 
-                    morphChanging = true;
-                    morphTime = 0;
-                    currentMorph.val = 0;
+                    if (currentMorph != null)
+                    {
+                        morphChanging = true;
+                        morphTime = 0;
+                        currentMorph.val = 0;
+                    }
                     if (logMessages) SuperController.LogMessage("Desired Morph: " + desiredMorph?.altName);
 
                     SetVAMBlinkEnabled(false);
@@ -1239,14 +1243,14 @@ namespace geesp0t
                     morphTime += Time.deltaTime;
                     if (morphTime < morphActivateTime)
                     {
-                        currentMorph.val = (morphTime / morphActivateTime) * morphPower;
+                        currentMorph.val = Mathf.Min((morphTime / morphActivateTime) * morphPower, currentMorph.max);
                         morphHoldOscVal = 0;
                     }
                     else if (morphTime < morphActivateTime + morphHoldTime)
                     {
                         //oscillate a little during hold
                         morphHoldOscVal += Time.deltaTime;
-                        currentMorph.val = (1.0f - Mathf.Sin(morphHoldOscVal * 3.5f) * 0.07f) * morphPower;
+                        currentMorph.val = Mathf.Min((1.0f - Mathf.Sin(morphHoldOscVal * 3.5f) * 0.07f) * morphPower, currentMorph.max);
                     }
                     else if (morphTime >= morphActivateTime + morphHoldTime + morphDeactivateTime)
                     {
@@ -1258,7 +1262,7 @@ namespace geesp0t
                     {
                         float morphDeactivateVal = (1.0f - (morphTime - (morphActivateTime + morphHoldTime)) / morphDeactivateTime);
                         morphDeactivateVal = Mathf.Pow(morphDeactivateVal, 1.5f);
-                        currentMorph.val = morphDeactivateVal * morphPower;
+                        currentMorph.val = Mathf.Min(morphDeactivateVal * morphPower, currentMorph.max);
                     }
                 }
 
@@ -1326,22 +1330,36 @@ namespace geesp0t
                 if (orgasming)
                 {
                     float contractionPercent = Mathf.PingPong(Time.time * 2.8f, 1.0f);
-                    anusOpenOut.val = Mathf.Lerp(anusOpenOut_start, anusOpenOut_max, contractionPercent);
-                    anusPushPull.val = Mathf.Lerp(anusPushPull_start, anusPushPull_max, contractionPercent);
-                    vaginaExpansion.val = Mathf.Lerp(vaginaExpansion_max, vaginaExpansion_max + 0.5f, contractionPercent);
-                    labiaMinoraLowL.val = Mathf.Lerp(labiaMinoraLowL_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent);
-                    labiaMinoraLowR.val = Mathf.Lerp(labiaMinoraLowR_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent);
-                    labiaMajoraLowL.val = Mathf.Lerp(labiaMajoraLowL_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent);
-                    labiaMajoraLowR.val = Mathf.Lerp(labiaMajoraLowR_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent);
+                    if (anusOpenOut != null)
+                        anusOpenOut.val = Mathf.Min(Mathf.Lerp(anusOpenOut_start, anusOpenOut_max, contractionPercent), anusOpenOut.max);
+                    if (anusPushPull != null)
+                        anusPushPull.val = Mathf.Min(Mathf.Lerp(anusPushPull_start, anusPushPull_max, contractionPercent), anusPushPull.max);
+                    if (vaginaExpansion != null)
+                        vaginaExpansion.val = Mathf.Min(Mathf.Lerp(vaginaExpansion_max, vaginaExpansion_max + 0.5f, contractionPercent), vaginaExpansion.max);
+                    if (labiaMinoraLowL != null)
+                        labiaMinoraLowL.val = Mathf.Min(Mathf.Lerp(labiaMinoraLowL_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent), labiaMinoraLowL.max);
+                    if (labiaMinoraLowR != null)
+                        labiaMinoraLowR.val = Mathf.Min(Mathf.Lerp(labiaMinoraLowR_max - 0.1f, labiaMinoraLowL_max + 0.1f, contractionPercent), labiaMinoraLowR.max);
+                    if (labiaMajoraLowL != null)
+                        labiaMajoraLowL.val = Mathf.Min(Mathf.Lerp(labiaMajoraLowL_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent), labiaMajoraLowL.max);
+                    if (labiaMajoraLowR != null)
+                        labiaMajoraLowR.val = Mathf.Min(Mathf.Lerp(labiaMajoraLowR_max - 0.2f, labiaMinoraLowL_max + 0.2f, contractionPercent), labiaMajoraLowR.max);
                 } else
                 {
-                    anusOpenOut.val = anusOpenOut_start;
-                    anusPushPull.val = anusPushPull_start;
-                    labiaMinoraLowL.val = Mathf.Lerp(labiaMinoraLowL_start, labiaMinoraLowL_max, percentToOrgasm);
-                    labiaMinoraLowR.val = Mathf.Lerp(labiaMinoraLowR_start, labiaMinoraLowR_max, percentToOrgasm);
-                    labiaMajoraLowL.val = Mathf.Lerp(labiaMajoraLowL_start, labiaMajoraLowL_max, percentToOrgasm);
-                    labiaMajoraLowR.val = Mathf.Lerp(labiaMajoraLowR_start, labiaMajoraLowR_max, percentToOrgasm);
-                    vaginaExpansion.val = Mathf.Lerp(vaginaExpansion_start, vaginaExpansion_max, percentToOrgasm);
+                    if (anusOpenOut != null)
+                        anusOpenOut.val = anusOpenOut_start;
+                    if (anusPushPull != null)
+                        anusPushPull.val = anusPushPull_start;
+                    if (labiaMinoraLowL != null)
+                        labiaMinoraLowL.val = Mathf.Min(Mathf.Lerp(labiaMinoraLowL_start, labiaMinoraLowL_max, percentToOrgasm), labiaMinoraLowL.max);
+                    if (labiaMinoraLowR != null)
+                        labiaMinoraLowR.val = Mathf.Min(Mathf.Lerp(labiaMinoraLowR_start, labiaMinoraLowR_max, percentToOrgasm), labiaMinoraLowR.max);
+                    if (labiaMajoraLowL != null)
+                        labiaMajoraLowL.val = Mathf.Min(Mathf.Lerp(labiaMajoraLowL_start, labiaMajoraLowL_max, percentToOrgasm), labiaMajoraLowL.max);
+                    if (labiaMajoraLowR != null)
+                        labiaMajoraLowR.val = Mathf.Min(Mathf.Lerp(labiaMajoraLowR_start, labiaMajoraLowR_max, percentToOrgasm), labiaMajoraLowR.max);
+                    if (vaginaExpansion != null)
+                        vaginaExpansion.val = Mathf.Min(Mathf.Lerp(vaginaExpansion_start, vaginaExpansion_max, percentToOrgasm), vaginaExpansion.max);
                 }
 
                 if (easyMoanCycleForce != null) easyMoanCycleForce.percentToOrgasm = percentToOrgasm;
