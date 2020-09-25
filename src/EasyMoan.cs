@@ -1,9 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
-using SimpleJSON;
 using System.Linq;
 namespace geesp0t
 {
@@ -30,6 +28,7 @@ namespace geesp0t
         protected JSONStorableFloat timeBetweenMoans;
         protected JSONStorableFloat randomExtraTimePercent;
         protected JSONStorableFloat randomExtraTimePercentNearOrgasm;
+        protected JSONStorableFloat percentToOrgasmFloat;
 
         protected JSONStorableFloat endBlowJobSpeed;
         protected JSONStorableFloat stimulationToOrgasm;
@@ -453,13 +452,15 @@ namespace geesp0t
                 stimulationToOrgasm.storeType = JSONStorableParam.StoreType.Full;
                 CreateSlider(stimulationToOrgasm, true);
 
+                percentToOrgasmFloat = new JSONStorableFloat("Percent to Orgasm Float Value", 0.0f, 0.0f, 1.0f, false);
+                RegisterFloat(percentToOrgasmFloat);
+                percentToOrgasmFloat.storeType = JSONStorableParam.StoreType.Full;
+
                 mainUIButtons = new MainUIButtons();
                 mainUIButtons.Init(this);
-
             }
             catch (Exception e) { SuperController.LogError("Exception caught: " + e); }
         }
-
 
         public void ButtonCreateDildoIfNeeded()
         {
@@ -1325,6 +1326,7 @@ namespace geesp0t
 
                 explanationString.val = string.Format("Orgasm Percent: {0:P}", percentToOrgasm);
 
+                percentToOrgasmFloat.SetVal(percentToOrgasm);
 
                 //handle vagina morphs based on arousal and orgasm
                 if (orgasming)
